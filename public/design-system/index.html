@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Build a Design System | Kaizen Collective</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink: #1A1A18;
+    --cream: #F5F0E8;
+    --gold: #C9A84C;
+    --gold-dark: #A8893D;
+    --gold-light: #E8DDB8;
+    --gold-pale: #F5F0DC;
+    --charcoal: #2E2E2A;
+    --stone: #8C8778;
+    --parchment: #EDE8DC;
+    --white: #FEFDFB;
+    --red: #C45B4A;
+    --green: #5A9E6F;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', Arial, sans-serif;
+    font-weight: 300;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.85;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 780px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---- HERO ---- */
+  .hero {
+    background: var(--ink);
+    padding: 120px 0 100px;
+    text-align: center;
+  }
+  .hero .page { max-width: 680px; }
+  .hero .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 400;
+    font-size: 52px;
+    line-height: 1.15;
+    color: var(--cream);
+    margin-bottom: 24px;
+  }
+  .hero h1 em {
+    color: var(--gold);
+    font-style: italic;
+  }
+  .hero .subtitle {
+    font-size: 18px;
+    color: var(--stone);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+  .hero .meta {
+    margin-top: 48px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+  .hero .meta span { color: var(--gold); }
+
+  /* ---- DIVIDER ---- */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+    margin: 0;
+  }
+
+  /* ---- SECTIONS ---- */
+  .section { padding: 80px 0; }
+  .section.dark { background: var(--ink); color: var(--cream); }
+  .section.dark .stone { color: #6B6860; }
+  .section.cream { background: var(--cream); }
+  .section.parchment { background: var(--parchment); }
+  .section.charcoal { background: var(--charcoal); color: var(--cream); }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .dark .eyebrow { color: var(--gold); }
+
+  h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+  h2 em { color: var(--gold); font-style: italic; }
+  .dark h2 { color: var(--cream); }
+
+  h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    margin-top: 48px;
+  }
+  h3 em { color: var(--gold-dark); font-style: italic; }
+  .dark h3 { color: var(--cream); }
+  .dark h3 em { color: var(--gold); }
+
+  p { margin-bottom: 20px; max-width: 640px; }
+  .dark p { color: var(--parchment); }
+
+  .lead {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--stone);
+    max-width: 600px;
+    margin-bottom: 48px;
+  }
+  .dark .lead { color: #8C8778; }
+
+  strong { font-weight: 500; }
+
+  /* ---- CALLOUT (DARK) ---- */
+  .callout-dark {
+    background: var(--ink);
+    padding: 48px 40px;
+    text-align: center;
+    margin: 48px 0;
+    border-top: 1px solid rgba(201, 168, 76, 0.3);
+  }
+  .callout-dark p {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    line-height: 1.6;
+    color: var(--cream);
+    max-width: 580px;
+    margin: 0 auto;
+    font-weight: 400;
+  }
+  .callout-dark em { color: var(--gold); font-style: italic; }
+
+  /* ---- CALLOUT (WARM) ---- */
+  .callout-warm {
+    background: var(--parchment);
+    border-left: 3px solid var(--gold);
+    padding: 24px 28px;
+    margin: 32px 0;
+  }
+  .callout-warm p { margin-bottom: 0; color: var(--ink); }
+
+  /* ---- MARIO VOICE ---- */
+  .mario-voice {
+    background: var(--ink);
+    border-left: 3px solid var(--gold);
+    padding: 28px 32px;
+    margin: 40px 0;
+    position: relative;
+  }
+  .mario-voice::after {
+    content: 'MARIO';
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    opacity: 0.5;
+  }
+  .mario-voice p {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--cream);
+    margin-bottom: 0;
+    max-width: 100%;
+  }
+
+  /* ---- STEP CARDS ---- */
+  .step-grid {
+    display: grid;
+    gap: 1px;
+    background: var(--gold-light);
+    margin: 40px 0;
+  }
+  .step-card {
+    background: var(--white);
+    padding: 32px;
+  }
+  .dark .step-card { background: var(--charcoal); }
+  .step-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    color: var(--gold);
+    margin-bottom: 8px;
+    line-height: 1;
+  }
+  .step-title {
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .dark .step-title { color: var(--cream); }
+  .step-desc {
+    font-size: 14px;
+    color: var(--stone);
+    line-height: 1.7;
+  }
+
+  /* ---- COLOUR SWATCH GRID ---- */
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .swatch {
+    text-align: center;
+  }
+  .swatch-color {
+    height: 80px;
+    margin-bottom: 8px;
+  }
+  .swatch-name { font-weight: 500; font-size: 13px; }
+  .swatch-hex { font-size: 11px; color: var(--stone); font-family: monospace; }
+
+  /* ---- NUMBERED LIST ---- */
+  .num-list { list-style: none; counter-reset: nl; margin: 32px 0; }
+  .num-list li {
+    counter-increment: nl;
+    padding: 20px 0 20px 56px;
+    position: relative;
+    border-bottom: 1px solid var(--gold-light);
+  }
+  .num-list li:last-child { border-bottom: none; }
+  .num-list li::before {
+    content: counter(nl, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 20px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px;
+    color: var(--gold);
+  }
+  .dark .num-list li { border-bottom-color: rgba(255,255,255,0.08); }
+
+  /* ---- COMPONENT SHOWCASE ---- */
+  .component-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+  .component-card {
+    background: var(--white);
+    border: 1px solid var(--gold-light);
+    padding: 28px;
+  }
+  .dark .component-card {
+    background: var(--charcoal);
+    border-color: rgba(255,255,255,0.08);
+  }
+  .component-card .label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 8px;
+  }
+  .dark .component-card .label { color: var(--gold); }
+  .component-card .name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+  .component-card .desc {
+    font-size: 14px;
+    color: var(--stone);
+    line-height: 1.6;
+  }
+
+  /* ---- TABLE OF CONTENTS ---- */
+  .toc {
+    margin: 40px 0;
+  }
+  .toc a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--gold-light);
+    text-decoration: none;
+    color: var(--ink);
+    transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--gold-dark); }
+  .toc .num {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--gold);
+    font-size: 18px;
+    margin-right: 16px;
+  }
+  .toc .title { font-weight: 400; flex: 1; }
+  .toc .dots {
+    flex: 1;
+    border-bottom: 1px dotted var(--gold-light);
+    margin: 0 12px;
+    min-width: 40px;
+  }
+
+  /* ---- SHOWCASE GRID ---- */
+  .showcase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin: 40px 0;
+  }
+  .showcase-grid.two-col { grid-template-columns: 1fr 1fr; }
+  .showcase-item {
+    background: var(--white);
+    overflow: hidden;
+    position: relative;
+    border-radius: 0;
+  }
+  .dark .showcase-item { background: var(--charcoal); }
+  .showcase-item .preview {
+    padding: 24px;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .showcase-item .caption {
+    padding: 12px 16px;
+    background: var(--parchment);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+  .dark .showcase-item .caption { background: rgba(255,255,255,0.05); color: var(--stone); }
+
+  /* Mini swatches for the showcase */
+  .mini-swatch-row { display: flex; gap: 8px; }
+  .mini-swatch { width: 48px; height: 48px; }
+
+  /* Mini type specimen */
+  .mini-headline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .mini-headline-light {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 300;
+    font-size: 28px;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .mini-body {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--stone);
+    margin-top: 8px;
+  }
+
+  /* Mini component previews */
+  .mini-btn {
+    display: inline-block;
+    padding: 10px 24px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 0;
+  }
+  .mini-card-preview {
+    padding: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.03);
+  }
+  .mini-stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 1;
+  }
+  .mini-stat-label {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* Prompt cards */
+  .prompt-card {
+    background: var(--charcoal);
+    padding: 28px 32px;
+    margin: 20px 0;
+    border-left: 3px solid var(--gold);
+    position: relative;
+  }
+  .prompt-card .prompt-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .prompt-card .prompt-text {
+    font-family: 'DM Sans', monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--cream);
+    white-space: pre-wrap;
+    max-width: 100%;
+  }
+  .prompt-card .fill-in-banner {
+    background: rgba(201, 168, 76, 0.15);
+    border: 1px dashed var(--gold);
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--gold);
+    line-height: 1.6;
+  }
+  .prompt-card .fill-in-banner strong {
+    color: var(--cream);
+    font-weight: 500;
+  }
+  .fill-field {
+    background: rgba(201, 168, 76, 0.2);
+    color: var(--gold);
+    padding: 1px 6px;
+    font-weight: 500;
+  }
+  .prompt-card .prompt-note {
+    font-size: 12px;
+    color: var(--stone);
+    margin-top: 16px;
+    font-style: italic;
+  }
+
+  /* ---- FOOTER ---- */
+  .footer {
+    background: var(--ink);
+    padding: 48px 0;
+    text-align: center;
+  }
+  .footer p {
+    color: var(--stone);
+    font-size: 12px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .footer .brand {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--gold);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="page">
+    <div class="eyebrow">Kaizen Collective | The Build Guide</div>
+    <h1>How to Build a <em>Design System</em> That Actually Gets Used</h1>
+    <p class="subtitle">A design system isn't a Canva folder with your logo in it. It's the reason your brand stops looking like it was made by six different people on six different days.</p>
+    <div class="meta">By <span>Mario Paguio</span> | March 2026</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ SHOWCASE: THE PROOF ============ -->
+<section class="section dark">
+  <div class="page">
+    <div class="eyebrow">The Proof | My Brand System in Action</div>
+    <h2>This Is What a <em>Design System</em> Produces</h2>
+    <p class="lead">Everything below was built in a single session. Same colours. Same fonts. Same components. Same rules. That's the point. It doesn't matter whether it's a social post, a website section, or a stat card — it all looks like it came from one mind.</p>
+
+    <h3>The Palette</h3>
+    <p>Three primary colours. That's it. Everything else is a shade of one of these.</p>
+    <div class="showcase-grid">
+      <div class="showcase-item">
+        <div class="preview" style="background: #141F1B;">
+          <span style="color: #7A9E8C; font-size: 12px; letter-spacing: 0.1em;">PRIMARY DARK</span>
+        </div>
+        <div class="caption">Forest | #141F1B</div>
+      </div>
+      <div class="showcase-item">
+        <div class="preview" style="background: #F5F0E8;">
+          <span style="color: #8C8778; font-size: 12px; letter-spacing: 0.1em;">PRIMARY LIGHT</span>
+        </div>
+        <div class="caption">Cream | #F5F0E8</div>
+      </div>
+      <div class="showcase-item">
+        <div class="preview" style="background: #BFA278;">
+          <span style="color: #141F1B; font-size: 12px; letter-spacing: 0.1em;">ACCENT</span>
+        </div>
+        <div class="caption">Brass | #BFA278</div>
+      </div>
+    </div>
+
+    <h3>The Typography</h3>
+    <p>Two fonts. <strong>Barlow Condensed</strong> for headlines — uppercase, weight contrast creates hierarchy. <strong>DM Sans</strong> for everything else — light weight (300), invisible on purpose. Zero border-radius on every element. No serifs. No italic for emphasis — weight and colour only.</p>
+    <div class="showcase-grid two-col">
+      <div class="showcase-item">
+        <div class="preview" style="background: #141F1B; padding: 28px;">
+          <div class="mini-headline-light" style="color: #7A9E8C;">YOUR BUSINESS</div>
+          <div class="mini-headline" style="color: #F5F0E8;">WORKS.</div>
+          <div class="mini-headline-light" style="color: #7A9E8C;">SO WHY DOES IT FEEL LIKE</div>
+          <div class="mini-headline" style="color: #BFA278;">SOMEONE ELSE'S?</div>
+        </div>
+        <div class="caption">Weight contrast headline | Dark surface</div>
+      </div>
+      <div class="showcase-item">
+        <div class="preview" style="background: #F5F0E8; padding: 28px;">
+          <div class="mini-headline-light" style="color: #8C8778;">THE VISIBLE</div>
+          <div class="mini-headline-light" style="color: #8C8778;">PROBLEM IS</div>
+          <div class="mini-headline" style="color: #141F1B;">RARELY THE</div>
+          <div class="mini-headline" style="color: #141F1B;">REAL ONE.</div>
+        </div>
+        <div class="caption">Weight contrast headline | Light surface</div>
+      </div>
+    </div>
+
+    <h3>The Components</h3>
+    <p>Eight building blocks, used consistently everywhere. Here are four of them.</p>
+    <div class="showcase-grid two-col">
+      <div class="showcase-item">
+        <div class="preview" style="background: #141F1B; padding: 28px;">
+          <div class="mini-btn" style="background: #BFA278; color: #141F1B;">EXPLORE THE FRAMEWORK</div>
+          <div style="margin-top: 12px;">
+            <div class="mini-btn" style="background: #141F1B; color: #F5F0E8; border: 1px solid #243D35;">LEARN MORE</div>
+          </div>
+        </div>
+        <div class="caption">Buttons | Primary + Secondary</div>
+      </div>
+      <div class="showcase-item">
+        <div class="preview" style="background: #141F1B; padding: 28px;">
+          <div class="mini-stat-num" style="color: #F5F0E8;">700+</div>
+          <div class="mini-stat-label" style="color: #7A9E8C;">BUSINESSES SERVED</div>
+          <div style="margin-top: 16px;">
+            <div class="mini-stat-num" style="color: #F5F0E8;">$3.3M</div>
+            <div class="mini-stat-label" style="color: #7A9E8C;">PROVEN REVENUE</div>
+          </div>
+        </div>
+        <div class="caption">Stat Blocks</div>
+      </div>
+      <div class="showcase-item">
+        <div class="preview" style="background: #141F1B; padding: 20px;">
+          <div class="mini-card-preview">
+            <div style="font-size: 9px; font-weight: 500; letter-spacing: 0.15em; color: #BFA278; margin-bottom: 6px;">RESULT</div>
+            <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; color: #F5F0E8; text-transform: uppercase;">$8K → $23K/MONTH<br>IN 90 DAYS</div>
+            <div style="font-size: 12px; color: #7A9E8C; margin-top: 8px; line-height: 1.5;">"The systems completely changed how we operate."</div>
+          </div>
+        </div>
+        <div class="caption">Testimonial Card | Results-First</div>
+      </div>
+      <div class="showcase-item">
+        <div class="preview" style="background: #141F1B; padding: 20px;">
+          <div style="font-size: 9px; font-weight: 500; letter-spacing: 0.15em; color: #BFA278; margin-bottom: 6px;">THE FRAMEWORK</div>
+          <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; color: #F5F0E8; text-transform: uppercase;">SOUL</div>
+          <div style="width: 32px; height: 2px; background: #BFA278; margin: 8px 0;"></div>
+          <div style="font-size: 12px; color: #7A9E8C; line-height: 1.6;">Excavate who you are beneath the business you built.</div>
+        </div>
+        <div class="caption">Content Card | Dark Surface</div>
+      </div>
+    </div>
+
+    <h3>Social Media Templates</h3>
+    <p>12 templates across 3 sizes. Same system, different formats. Every one looks like the same person made it — because the same system made it.</p>
+    <div class="showcase-grid">
+      <div class="showcase-item">
+        <div class="preview" style="background: #141F1B; padding: 20px; min-height: 200px;">
+          <div style="font-size: 9px; font-weight: 500; letter-spacing: 0.15em; color: #BFA278; margin-bottom: 12px;">MARIO PAGUIO</div>
+          <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 300; font-size: 24px; color: #7A9E8C; text-transform: uppercase; line-height: 1.1;">YOU CAN'T<br>SOLVE A<br>PROBLEM</div>
+          <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 24px; color: #F5F0E8; text-transform: uppercase; line-height: 1.1;">AT THE<br>WRONG LEVEL.</div>
+          <div style="width: 24px; height: 2px; background: #BFA278; margin-top: 12px;"></div>
+        </div>
+        <div class="caption">Square | Bold Statement</div>
+      </div>
+      <div class="showcase-item">
+        <div class="preview" style="background: #0D1512; padding: 20px; min-height: 200px;">
+          <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 90px; text-transform: uppercase; color: rgba(255,255,255,0.04); line-height: 0.9; position: absolute; top: 12px; left: 16px;">01</div>
+          <div style="font-size: 9px; font-weight: 500; letter-spacing: 0.15em; color: #BFA278; margin-bottom: 8px; position: relative;">BUSINESS TIP</div>
+          <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; color: #F5F0E8; text-transform: uppercase; line-height: 1.15; letter-spacing: -0.01em; position: relative;">STOP BUILDING<br>FOR EVERYONE</div>
+          <div style="font-size: 11px; color: #7A9E8C; margin-top: 8px; line-height: 1.5; position: relative;">Your offer should repel 80% of people.</div>
+        </div>
+        <div class="caption">Square | Numbered Tip</div>
+      </div>
+      <div class="showcase-item">
+        <div class="preview" style="background: #F5F0E8; padding: 20px; min-height: 200px;">
+          <div style="font-size: 9px; font-weight: 500; letter-spacing: 0.15em; color: #9E8560; margin-bottom: 12px;">MARIO PAGUIO</div>
+          <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 300; font-size: 24px; color: #8C8778; text-transform: uppercase; line-height: 1.1;">THE VISIBLE<br>PROBLEM IS</div>
+          <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 24px; color: #141F1B; text-transform: uppercase; line-height: 1.1;">RARELY THE<br>REAL ONE.</div>
+          <div style="width: 24px; height: 2px; background: #9E8560; margin-top: 12px;"></div>
+        </div>
+        <div class="caption">Square | Bold Statement (Cream)</div>
+      </div>
+    </div>
+
+    <div class="mario-voice">
+      <p>All of this was built in a single session. Not because I'm fast. Because the system made 90% of the decisions before I sat down. That's the multiplier. You don't save time by working faster — you save it by not making the same decision twice.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ INTRO ============ -->
+<section class="section cream">
+  <div class="page">
+    <div class="eyebrow">00 | Why This Exists</div>
+    <h2>Your Brand Has a <em>Memory Problem</em></h2>
+
+    <p>Every time you create a social post, a landing page, an email, or a client document, you're making a hundred small decisions. What colour is that background? What font size? How much space between the headline and the body? Is the button gold or dark?</p>
+
+    <p>Without a design system, you make those decisions fresh every single time. And you get them slightly different every single time.</p>
+
+    <p>The result looks "fine." It looks professional enough. But it doesn't look like one person made it. It doesn't compound into recognition. And recognition is what you're actually building when you're building a brand.</p>
+
+    <div class="mario-voice">
+      <p>A design system is not about making things pretty. It's about making decisions once so you never have to make them again. Every minute you spend choosing a font size is a minute you're not spending on the work that actually matters.</p>
+    </div>
+
+    <p>This guide walks you through building one from scratch. Not in Figma. Not with expensive tools. Just a set of decisions, documented clearly enough that anyone on your team — or any AI tool you use — can produce work that looks unmistakably like yours.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ TABLE OF CONTENTS ============ -->
+<section class="section parchment">
+  <div class="page">
+    <div class="eyebrow">Contents</div>
+    <h2>What We'll Build</h2>
+    <div class="toc">
+      <a href="#s1"><span class="num">01</span><span class="title">Colour Palette</span><span class="dots"></span></a>
+      <a href="#s2"><span class="num">02</span><span class="title">Typography</span><span class="dots"></span></a>
+      <a href="#s3"><span class="num">03</span><span class="title">Spacing & Grid</span><span class="dots"></span></a>
+      <a href="#s4"><span class="num">04</span><span class="title">Components</span><span class="dots"></span></a>
+      <a href="#s5"><span class="num">05</span><span class="title">Templates</span><span class="dots"></span></a>
+      <a href="#s6"><span class="num">06</span><span class="title">Usage Rules</span><span class="dots"></span></a>
+      <a href="#s7"><span class="num">07</span><span class="title">How to Actually Use It</span><span class="dots"></span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01: COLOUR ============ -->
+<section class="section dark" id="s1">
+  <div class="page">
+    <div class="eyebrow">01 | Colour Palette</div>
+    <h2>Pick Your Colours <em>Once</em></h2>
+
+    <p class="lead">You need exactly three types of colour. Not twelve. Not a mood board with forty shades pulled from a sunset photo. Three types.</p>
+
+    <h3>The Three Roles</h3>
+
+    <div class="step-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-title">Primary Surface</div>
+        <div class="step-desc">Your dominant background colour. This is what 60% of your brand looks like. Dark or light — pick one as the default. The other becomes the alternate for visual rhythm.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-title">Text Colour</div>
+        <div class="step-desc">Whatever your surface isn't. If your surface is dark, your text is cream/light. If your surface is cream, your text is dark. High contrast. Always readable.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-title">Accent Colour</div>
+        <div class="step-desc">ONE colour that does all the heavy lifting for buttons, highlights, eyebrows, and emphasis. Not two accents. Not a gradient. One. This is the colour people remember.</div>
+      </div>
+    </div>
+
+    <div class="mario-voice">
+      <p>Here's the test: if someone described your brand colours to a friend, could they do it in one sentence? "Dark green, cream, and gold." Done. If it takes more than one sentence, you have too many colours.</p>
+    </div>
+
+    <h3>Build the Scale</h3>
+
+    <p>Once you have your three, build subtle variations of each for depth:</p>
+
+    <ul class="num-list">
+      <li><strong>Surface: 3-4 shades.</strong> A deep version (for hero sections), a base version (default), a lighter version (for layering), and a muted version (for subtle backgrounds). These create depth without introducing new colours.</li>
+      <li><strong>Accent: 3 shades.</strong> A dark version (for text on light backgrounds), the base, and a light version (for subtle borders and dividers).</li>
+      <li><strong>Secondary colours: 2-3 neutrals.</strong> A muted tone for secondary text (like captions and labels), and a warm neutral for alternate section backgrounds.</li>
+      <li><strong>Functional colours (optional).</strong> Red for warnings. Green for success. Amber for caution. Only if your content needs them. Most personal brands don't.</li>
+    </ul>
+
+    <h3>The "Never" List</h3>
+
+    <p>Write down what colours you will never use. This matters more than you think. It prevents your designer, your VA, or your AI tool from introducing off-brand colours.</p>
+
+    <div class="callout-warm" style="background: var(--charcoal); border-left-color: var(--gold);">
+      <p style="color: var(--cream);"><strong>Example:</strong> "Never use pure black (#000000), pure white (#FFFFFF), blue, purple, neon, or gradients." That one sentence eliminates 90% of bad design decisions before they happen.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ 02: TYPOGRAPHY ============ -->
+<section class="section cream" id="s2">
+  <div class="page">
+    <div class="eyebrow">02 | Typography</div>
+    <h2>Two Fonts. <em>No Exceptions.</em></h2>
+
+    <p class="lead">Typography is where most brands fall apart. Not because they picked bad fonts — because they picked too many, or they use them inconsistently.</p>
+
+    <h3>The Two-Font System</h3>
+
+    <div class="component-row">
+      <div class="component-card">
+        <div class="label">Display Font</div>
+        <div class="name">For Headlines</div>
+        <div class="desc">Condensed or serif. Used for all headings, titles, and large text. This is the font people associate with your brand. It should have character. Not "safe" — distinctive.</div>
+      </div>
+      <div class="component-card">
+        <div class="label">Body Font</div>
+        <div class="name">For Everything Else</div>
+        <div class="desc">Clean sans-serif. Used for body copy, buttons, labels, metadata. It should be invisible — the reader should never notice it. It exists to be read, not admired.</div>
+      </div>
+    </div>
+
+    <h3>Weight Is Your Hierarchy Tool</h3>
+
+    <p>You don't need six font sizes to create hierarchy. You need weight contrast.</p>
+
+    <p><strong>Light weight (300)</strong> for context — the supporting words that set up the emphasis.</p>
+    <p><strong>Bold weight (700)</strong> for emphasis — the words that carry the meaning.</p>
+    <p><strong>Accent colour</strong> on the single most important word — the one you want burned into memory.</p>
+
+    <div class="mario-voice">
+      <p>Think about it like a stage. The light text is the set design. The bold text is the actor. The accent-coloured word is the spotlight. If you spotlight everything, nothing is spotlit.</p>
+    </div>
+
+    <h3>Your Type Scale</h3>
+
+    <p>Document the exact sizes you'll use. Not approximations. Exact pixels or points.</p>
+
+    <div class="callout-warm">
+      <p><strong>A practical scale:</strong> 12px (labels) → 14px (small body) → 16px (body) → 20px (lead text) → 24px (H3) → 36px (H2) → 48-64px (H1) → 80-120px (hero headlines). That's your full range. If a size doesn't exist in this scale, you don't use it.</p>
+    </div>
+
+    <h3>The Rules That Matter</h3>
+
+    <ul class="num-list">
+      <li><strong>Headlines are always uppercase</strong> in your display font. Lowercase headlines look casual in a way that undermines authority.</li>
+      <li><strong>Body text line-height is 1.7-1.85.</strong> Anything tighter feels cramped on screen. This is the single biggest readability improvement most brands can make.</li>
+      <li><strong>Eyebrow text is small, uppercase, letter-spaced, in your accent colour.</strong> It tells the reader what category they're in before they read the headline. It's a wayfinding tool, not decoration.</li>
+      <li><strong>Max body width is 560-640px.</strong> Wider than that and the eye loses the line. This is why your Instagram captions are easier to read than your website — the column is narrow.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ 03: SPACING ============ -->
+<section class="section dark" id="s3">
+  <div class="page">
+    <div class="eyebrow">03 | Spacing & Grid</div>
+    <h2>Whitespace Is Not <em>Wasted Space</em></h2>
+
+    <p class="lead">The single biggest difference between amateur design and professional design is not colour. It's not typography. It's how much space is between things.</p>
+
+    <p>Open Apple's website. Then open a random local gym's website. The content quality might be similar. The difference you feel is whitespace. Apple lets every element breathe. The gym site crams everything together because empty space feels "wasteful."</p>
+
+    <p>It's not wasteful. It's the design.</p>
+
+    <h3>The Spacing Scale</h3>
+
+    <p>Use a consistent scale based on multiples of 4 or 8:</p>
+
+    <div class="callout-warm" style="background: var(--charcoal); border-left-color: var(--gold);">
+      <p style="color: var(--cream);"><strong>4px</strong> (tiny gaps) → <strong>8px</strong> (between related items) → <strong>16px</strong> (between elements) → <strong>24px</strong> (between groups) → <strong>32px</strong> (section inner padding) → <strong>48px</strong> (between sections) → <strong>64px</strong> (major breaks) → <strong>96px</strong> (section padding) → <strong>128px</strong> (hero-level breathing room)</p>
+    </div>
+
+    <h3>The Grid</h3>
+
+    <p>For web pages: <strong>1100px max width, 12 columns, 24px gutters.</strong> That's the standard. Don't invent a new one.</p>
+
+    <p>For social media: content lives within the middle 80% of the frame. The outer 10% on each side is breathing room. This is why your posts feel cramped — you're filling edge to edge.</p>
+
+    <h3>Section Alternation</h3>
+
+    <p>Alternate dark and light sections. This creates visual rhythm — the eye gets a "reset" between each block of content. Think of it like paragraphs in writing. The blank line between paragraphs is what makes each one digestible.</p>
+
+    <div class="mario-voice">
+      <p>The rule I use: if someone scrolls your page and every section looks the same, they'll skim. If dark alternates with light, each section feels like a new moment. They stop. They read. That's the whole game.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ 04: COMPONENTS ============ -->
+<section class="section cream" id="s4">
+  <div class="page">
+    <div class="eyebrow">04 | Components</div>
+    <h2>Build the <em>Building Blocks</em></h2>
+
+    <p class="lead">A component is a reusable piece of design. You build it once, then use it everywhere. This is where the system pays for itself in time saved.</p>
+
+    <h3>The Essential Components</h3>
+
+    <div class="step-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-title">Primary Button</div>
+        <div class="step-desc">Accent background, dark text. Sharp corners (or your chosen border-radius). Used for the main CTA on every page.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-title">Secondary Button</div>
+        <div class="step-desc">Dark or outlined. For secondary actions. Never competes with the primary button visually.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-title">Card (Dark Surface)</div>
+        <div class="step-desc">For content blocks on dark backgrounds. Subtle border, semi-transparent fill. Eyebrow + title + body text.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-title">Card (Light Surface)</div>
+        <div class="step-desc">For content on light backgrounds. Warm white fill. Same structure: eyebrow + title + body.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">05</div>
+        <div class="step-title">Stat Block</div>
+        <div class="step-desc">Large number (display font) + small label underneath. Used for credibility rows: "700+ Businesses" etc.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">06</div>
+        <div class="step-title">Testimonial Card</div>
+        <div class="step-desc">Results-first format: the transformation IS the headline. Quote is supporting texture. Avatar + name + role at the bottom.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">07</div>
+        <div class="step-title">Section Divider</div>
+        <div class="step-desc">A thin line in your muted colour, or a short accent-coloured bar (4px × 60px) under headings. Never a thick decorative border.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">08</div>
+        <div class="step-title">Eyebrow Label</div>
+        <div class="step-desc">Small, uppercase, letter-spaced, accent-coloured. Sits above every section heading. The wayfinding system for your entire brand.</div>
+      </div>
+    </div>
+
+    <div class="mario-voice">
+      <p>You don't need twenty components. You need eight that are used consistently everywhere. The consistency IS the brand. A hundred beautiful but different designs is not a brand. Eight repeated patterns that people start to recognise — that's a brand.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ 05: TEMPLATES ============ -->
+<section class="section dark" id="s5">
+  <div class="page">
+    <div class="eyebrow">05 | Templates</div>
+    <h2>Templates Are <em>Decisions Made in Advance</em></h2>
+
+    <p class="lead">A template isn't a creative limitation. It's freedom from the hundred small decisions that slow you down every time you sit down to create.</p>
+
+    <h3>Social Media Templates</h3>
+
+    <p>Build templates for these three sizes:</p>
+
+    <div class="component-row">
+      <div class="component-card">
+        <div class="label">Square</div>
+        <div class="name">1080 × 1080</div>
+        <div class="desc">Instagram feed, Facebook, LinkedIn. Your workhorse format. Build 6-8 variants: bold statement, numbered tip, framework list, big stat, question hook, carousel cover.</div>
+      </div>
+      <div class="component-card">
+        <div class="label">Portrait</div>
+        <div class="name">1080 × 1350</div>
+        <div class="desc">Instagram feed (maximum real estate). Use for your strongest statements — these take up more screen space in the feed, so they stop the scroll harder.</div>
+      </div>
+    </div>
+
+    <div class="component-row">
+      <div class="component-card">
+        <div class="label">Stories</div>
+        <div class="name">1080 × 1920</div>
+        <div class="desc">Instagram/Facebook stories, Reels covers. Vertical full-screen. Build: quote, CTA (with button graphic), tip, and behind-the-scenes variants.</div>
+      </div>
+      <div class="component-card">
+        <div class="label">Landscape</div>
+        <div class="name">1920 × 1080</div>
+        <div class="desc">YouTube thumbnails, presentation slides, LinkedIn banners. Same design system, horizontal format.</div>
+      </div>
+    </div>
+
+    <h3>What Goes on Every Template</h3>
+
+    <ul class="num-list">
+      <li><strong>Your handle or logo.</strong> Bottom-left or top-left. Small. Always present. People screenshot and share — your name needs to be on it.</li>
+      <li><strong>Consistent padding.</strong> Content lives in the inner 80% of the frame. The 10% border on all sides is breathing room. This is the single thing that makes templates look professional.</li>
+      <li><strong>Your accent colour on the key phrase.</strong> One word or phrase per template gets the spotlight. Not three. One.</li>
+      <li><strong>Dark/light alternation across series.</strong> If you're posting a 5-day series, alternate dark and cream templates. Your feed becomes a visual rhythm instead of a wall of sameness.</li>
+    </ul>
+
+    <h3>The "Use This When" Note</h3>
+
+    <p>Every template should have a one-line note explaining when to use it. Not for you — for your team, your VA, or your future self at 9pm wondering which template fits this post.</p>
+
+    <div class="callout-warm" style="background: var(--charcoal); border-left-color: var(--gold);">
+      <p style="color: var(--cream);"><strong>Example:</strong> "Bold Statement | Dark — Use when you have a sharp, contrarian insight. Strong opinion. Core philosophy statement."</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ 06: USAGE RULES ============ -->
+<section class="section cream" id="s6">
+  <div class="page">
+    <div class="eyebrow">06 | Usage Rules</div>
+    <h2>The Rules That <em>Protect</em> the System</h2>
+
+    <p class="lead">A design system without usage rules is just a collection of nice things. The rules are what make it a system.</p>
+
+    <p>Write these down. Put them at the top of your design system document. Share them with every person who touches your brand.</p>
+
+    <h3>Colour Rules</h3>
+
+    <ul class="num-list">
+      <li><strong>Dark surfaces use your primary dark colour, never neutral black.</strong> Pure black feels cold and digital. Your dark should feel warm and intentional.</li>
+      <li><strong>Light surfaces use your cream/warm white, never pure white.</strong> Same principle. Pure white feels like a hospital. Warm white feels like a considered choice.</li>
+      <li><strong>Your accent colour is the ONLY accent.</strong> CTAs, emphasis words, icons, eyebrows — all one colour. The moment you introduce a second accent, you halve the impact of the first.</li>
+      <li><strong>Write your "never use" list.</strong> The colours that are permanently banned. This prevents scope creep from well-meaning people who "just thought this blue would look nice."</li>
+    </ul>
+
+    <h3>Typography Rules</h3>
+
+    <ul class="num-list">
+      <li><strong>Two fonts. No exceptions.</strong> Not "two fonts plus this one I found that looks great for quotes." Two. That's it.</li>
+      <li><strong>Weight creates hierarchy, not decoration.</strong> If everything is bold, nothing is bold. Use light weight for context, bold for emphasis.</li>
+      <li><strong>Every heading has an eyebrow above it.</strong> Small, uppercase, accent-coloured, letter-spaced. This creates consistency across every page, post, and document you produce.</li>
+    </ul>
+
+    <h3>Layout Rules</h3>
+
+    <ul class="num-list">
+      <li><strong>Content never touches the edges.</strong> Minimum 10% padding on all sides for social, 80-96px vertical padding for web sections.</li>
+      <li><strong>Dark/light alternation.</strong> Every other section switches. This is non-negotiable for web pages and carousel series.</li>
+      <li><strong>One idea per section.</strong> If you're trying to say two things in one section, split it into two sections. Apple doesn't cram. Neither should you.</li>
+    </ul>
+
+    <div class="mario-voice">
+      <p>The rules feel restrictive at first. Then they feel like freedom. Because you stop spending mental energy on decisions that don't matter and start spending it on the work that does. The constraint is the creative catalyst.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ 07: HOW TO USE IT ============ -->
+<section class="section dark" id="s7">
+  <div class="page">
+    <div class="eyebrow">07 | How to Actually Use It</div>
+    <h2>Putting the System <em>to Work</em></h2>
+
+    <p class="lead">A design system that lives in a document nobody opens is not a design system. It's homework you did once. Here's how to make it functional.</p>
+
+    <h3>Document It Simply</h3>
+
+    <p>One page. Not a 40-page brand book. One page with:</p>
+
+    <ul class="num-list">
+      <li><strong>Your colour palette</strong> with hex codes and usage notes</li>
+      <li><strong>Your two fonts</strong> with sizes for each role (H1, H2, body, label)</li>
+      <li><strong>Your spacing rules</strong> (padding amounts, section spacing)</li>
+      <li><strong>Your component list</strong> with a one-line description of each</li>
+      <li><strong>Your "never" list</strong> — what's permanently off-limits</li>
+      <li><strong>Your templates</strong> with "use this when" notes</li>
+    </ul>
+
+    <h3>Give It to Your AI Tools</h3>
+
+    <p>If you use AI to create content, your design system is the single most important thing you can give it. Paste your colour codes, your font rules, your "never" list, and your usage rules into the system prompt or context.</p>
+
+    <p>The difference between generic AI output and on-brand AI output is not the AI. It's whether you gave it the constraints to work within.</p>
+
+    <h3>Use the System for Every Decision</h3>
+
+    <p>New Instagram post? Check the template library. New landing page section? Pull from the components. New email? Use the colour palette and type scale. Every time you reach for a design decision, the system should already have the answer.</p>
+
+    <div class="callout-dark">
+      <p>The goal is not to make design faster. The goal is to make <em>every piece of content you produce</em> look like it came from the same person, the same brand, the same mind. Consistency compounds into recognition. Recognition compounds into trust. Trust compounds into revenue.</p>
+    </div>
+
+    <p>That's the whole system. Three colours. Two fonts. One accent. Eight components. A spacing scale. A set of rules. Templates with usage notes.</p>
+
+    <p>It sounds simple because it is simple. The hard part is the discipline to use it every single time.</p>
+
+    <p>That's where the compound effect lives.</p>
+  </div>
+</section>
+
+<!-- ============ PROMPTS FOR YOUR CLIENTS ============ -->
+<section class="section dark">
+  <div class="page">
+    <div class="eyebrow">08 | The Shortcut</div>
+    <h2>Prompts That Build <em>Your System</em> for You</h2>
+
+    <p class="lead">You don't need to build this manually. Give these prompts to Claude, ChatGPT, or any AI tool — and it will build the system with you. Each prompt is designed to produce a specific output. Run them in order.</p>
+
+    <div class="callout-warm" style="background: var(--charcoal); border-left-color: var(--gold);">
+      <p style="color: var(--cream);"><strong style="color: var(--gold);">Before you start:</strong> If you have existing brand documents — a brand guide, a style sheet, a Canva kit, a website you've already built, previous design work, even a mood board — <strong>attach them or paste them into the conversation first.</strong> Tell the AI: "I have these documents that you need to look through for context before we begin." The more it knows about what exists, the better the output. Don't start from zero if you're not at zero.</p>
+    </div>
+
+    <div class="mario-voice">
+      <p>These are the same prompts — simplified — that built my entire design system in a single session. You're not starting from scratch. You're starting from where I finished.</p>
+    </div>
+
+    <h3>Step 1 | Define Your Brand Identity</h3>
+    <p>Run this first. It establishes who you are before any design decisions are made.</p>
+
+    <div class="prompt-card">
+      <div class="prompt-label">Prompt 1 | Brand Foundation</div>
+      <div class="fill-in-banner">
+        <strong>Fill in before copying:</strong><br>
+        <span class="fill-field">[Describe your business]</span> &nbsp;
+        <span class="fill-field">[Who you serve]</span> &nbsp;
+        <span class="fill-field">[3-5 adjectives]</span> &nbsp;
+        <span class="fill-field">[2-3 brands you admire]</span> &nbsp;
+        <span class="fill-field">[2-3 things to avoid]</span>
+      </div>
+      <div class="prompt-text">I'm building a design system for my personal brand / business. Before we pick colours or fonts, I need you to understand who I am.
+
+My business: <span class="fill-field">[Describe your business in 2-3 sentences]</span>
+My audience: <span class="fill-field">[Who you serve]</span>
+My personality: <span class="fill-field">[3-5 adjectives that describe how you want to come across]</span>
+Brands I admire the look of: <span class="fill-field">[2-3 examples with URLs if possible]</span>
+What I never want to look like: <span class="fill-field">[2-3 things to avoid]</span>
+
+Based on this, suggest:
+1. A brand archetype (e.g., The Architect, The Guide, The Creator)
+2. Three words that should describe the visual feel
+3. What "premium" means for my specific brand</div>
+      <div class="prompt-note">This sets the foundation. Don't skip it. Everything that follows builds on these answers.</div>
+    </div>
+
+    <h3>Step 2 | Choose Your Colours</h3>
+
+    <div class="prompt-card">
+      <div class="prompt-label">Prompt 2 | Colour Palette</div>
+      <div class="prompt-text">Based on the brand identity we just defined, create a complete colour palette for my design system.
+
+I need:
+- 1 primary dark colour (for dark backgrounds — NOT pure black)
+- 1 primary light colour (for light backgrounds — NOT pure white)
+- 1 accent colour (for CTAs, highlights, emphasis)
+- 3-4 shades of the dark colour (deep, base, light, muted)
+- 2-3 shades of the accent (dark, base, light)
+- 2 secondary neutrals (muted text colour, alternate background)
+
+Format the output as CSS custom properties with hex codes and usage notes for each colour.
+
+Also write a "NEVER USE" list — colours that are permanently banned from this brand.</div>
+      <div class="prompt-note">Save this output. It becomes the single source of truth for every colour decision going forward.</div>
+    </div>
+
+    <h3>Step 3 | Choose Your Typography</h3>
+
+    <div class="prompt-card">
+      <div class="prompt-label">Prompt 3 | Typography System</div>
+      <div class="prompt-text">Create a typography system for my brand using exactly two fonts from Google Fonts.
+
+Based on my brand identity:
+- Suggest a display/headline font (distinctive, has character)
+- Suggest a body font (clean, highly readable, invisible)
+
+Then define my complete type scale:
+- Hero headline size
+- H1, H2, H3 sizes
+- Body text size
+- Lead/intro text size
+- Eyebrow/label text (small, uppercase, letter-spaced)
+- Button/CTA text
+
+For each, specify: font family, weight, size, letter-spacing, line-height, and colour (from my palette).
+
+Also define the weight contrast system:
+- Which weight = context/supporting text
+- Which weight = emphasis/power text
+- How the accent colour is used in headlines</div>
+      <div class="prompt-note">The weight contrast system is the signature move. Light vs bold in headlines creates hierarchy without needing more fonts.</div>
+    </div>
+
+    <h3>Step 4 | Define Your Spacing</h3>
+
+    <div class="prompt-card">
+      <div class="prompt-label">Prompt 4 | Spacing & Layout</div>
+      <div class="prompt-text">Create a spacing system for my brand.
+
+Define a spacing scale using multiples of 4 or 8 — from 4px (tiny) to 128px (hero breathing room).
+
+Then define:
+- Section vertical padding (minimum and ideal)
+- Content max-width for web pages
+- Grid system (columns, gutters)
+- Social media padding rules (how much content stays away from edges)
+- The section alternation rule (dark/light rhythm)
+
+Format as CSS custom properties.</div>
+    </div>
+
+    <h3>Step 5 | Build Your Components</h3>
+
+    <div class="prompt-card">
+      <div class="prompt-label">Prompt 5 | Component Library</div>
+      <div class="prompt-text">Using my colour palette, typography, and spacing system, design these 8 components as CSS code:
+
+1. Primary Button (accent background, dark text, my border-radius)
+2. Secondary Button (dark or outlined)
+3. Card for dark surfaces (subtle border, semi-transparent fill)
+4. Card for light surfaces (warm fill, no border)
+5. Stat Block (large number + small label)
+6. Testimonial Card (results headline + quote + attribution)
+7. Section Divider (line + accent bar options)
+8. Eyebrow Label (small, uppercase, accent colour, letter-spaced)
+
+For each component, include hover states and the exact CSS using my design tokens.</div>
+    </div>
+
+    <h3>Step 6 | Create Your Social Templates</h3>
+
+    <div class="prompt-card">
+      <div class="prompt-label">Prompt 6 | Social Media Templates</div>
+      <div class="fill-in-banner">
+        <strong>Fill in before copying:</strong><br>
+        <span class="fill-field">[@yourhandle]</span>
+      </div>
+      <div class="prompt-text">Using my complete design system (colours, fonts, components), create social media template specifications for:
+
+SQUARE (1080x1080):
+- Bold Statement (dark background)
+- Bold Statement (light background)
+- Numbered Tip with oversized muted number
+- Framework/List
+- Big Stat
+- Question Hook
+- Carousel Cover
+
+PORTRAIT (1080x1350):
+- Bold Statement (dark + light variants)
+
+STORIES (1080x1920):
+- Quote
+- CTA with button
+
+For each template, specify:
+- Exact layout (what goes where, pixel positions)
+- Which fonts and sizes
+- Which colours from my palette
+- Where my handle goes
+- A one-line "USE THIS WHEN" note
+
+My handle is: <span class="fill-field">[@yourhandle]</span></div>
+    </div>
+
+    <h3>Step 7 | Write Your Usage Rules</h3>
+
+    <div class="prompt-card">
+      <div class="prompt-label">Prompt 7 | Usage Rules Document</div>
+      <div class="prompt-text">Create a one-page design system usage rules document that I can share with my team, my VA, and paste into AI tools.
+
+Include:
+- My colour palette with hex codes and one-line usage notes
+- My two fonts with roles
+- My type scale
+- My spacing rules
+- My "NEVER" list (banned colours, fonts, styles)
+- My 8 components with one-line descriptions
+- My template list with "use this when" notes
+- My dark/light alternation rule
+
+Format it as a clean, scannable document — not a paragraph dump. Use tables where they help. Keep it to ONE page equivalent. If someone reads this in 3 minutes, they should be able to produce on-brand work.</div>
+      <div class="prompt-note">This is the document that makes the system stick. Pin it everywhere. Paste it into every AI conversation. Give it to every person who touches your brand.</div>
+    </div>
+
+    <div class="callout-dark">
+      <p>Seven prompts. Run in order. Each one builds on the last. By the end, you have a complete design system — colours, fonts, spacing, components, templates, and rules — that you can hand to <em>anyone</em> and they'll produce work that looks like yours.</p>
+    </div>
+
+    <p>The system took me an afternoon to build the first time. These prompts compress that into an hour. But here's the thing — the hour you spend on this saves you hundreds of hours of small decisions for the rest of your brand's life.</p>
+
+    <p>That's the compound effect. Not doing more. Deciding once.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ FOOTER ============ -->
+<section class="footer">
+  <div class="page">
+    <div class="brand">Kaizen Collective</div>
+    <p>We Turn Pros Into CEOs | kaizencollective.com.au</p>
+  </div>
+</section>
+
+</body>
+</html>
